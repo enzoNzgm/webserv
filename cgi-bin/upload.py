@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import os
 import sys
-import cgi
+from email.parser import BytesParser
+from email.policy import HTTP
 import re
 
 UPLOAD_DIR = "./website/uploads"
@@ -33,15 +34,23 @@ try:
         os.makedirs(UPLOAD_DIR, mode=0o755)
 
     # Parse le MIME multipart depuis stdin
-    form = cgi.FieldStorage()
+    content_type = os.environ.get("CONTENT_TYPE", "")
+    body = sys.stdin.buffer.read()
+    message = BytesParser(policy=HTTP).parsebytes(
+        b"Content-Type: " + content_type.encode() + b"\r\n\r\n" + body)
 
-    fileitem = form["file"] if "file" in form else None
+    fileitem = None
+    if message.is_multipart():
+        for part in message.iter_parts():
+            if part.get_param("name", header="content-disposition") == "file":
+                fileitem = part
+                break
 
-    if fileitem is None or not fileitem.filename:
+    if fileitem is None or not fileitem.get_filename():
         print("<html><body><h1>Erreur: Aucun fichier envoyé</h1></body></html>")
         sys.exit(0)
 
-    filename = os.path.basename(fileitem.filename)
+    filename = os.path.basename(fileitem.get_filename())
 
     # Vérifie la sécurité du nom de fichier
     if not is_safe_filename(filename):
@@ -67,7 +76,7 @@ try:
             counter += 1
 
     # Lit et écrit le fichier avec limite de taille
-    file_data = fileitem.file.read(MAX_FILE_SIZE + 1)
+    file_data = fileitem.get_payload(decode=True) or b""
 
     if len(file_data) > MAX_FILE_SIZE:
         print(f"<html><body><h1>Erreur: Fichier trop volumineux</h1>"

@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iostream>
 #include <cstdlib>
+#include <stdexcept>
 
 // Helper function for C++98 compatibility
 template <typename T>
@@ -116,7 +117,14 @@ static std::string handlePOST_upload(WsrvRequest &req, WsrvServer &config)
 	env["CONTENT_LENGTH"] = toString(req.body.size());
 	env["SCRIPT_FILENAME"] = config.cgi_path;
 
-	std::string output = cgi.run(config.cgi_path, req.body, env);
+	std::string output;
+	try {
+		output = cgi.run(config.cgi_path, req.body, env);
+	}
+	catch (const std::exception &e) {
+		std::cerr << "CGI error: " << e.what() << std::endl;
+		return buildHttpResponse(500, "<h1>500 Internal Server Error</h1>", "text/html");
+	}
 
 	return "HTTP/1.1 200 OK\r\n" + output;
 }
@@ -131,7 +139,14 @@ static std::string handlePOST_delete(WsrvRequest &req, WsrvServer &config)
 	env["CONTENT_LENGTH"] = toString(req.body.size());
 	env["SCRIPT_FILENAME"] = config.delete_cgi;
 
-	std::string output = cgi.run(config.delete_cgi, req.body, env);
+	std::string output;
+	try {
+		output = cgi.run(config.delete_cgi, req.body, env);
+	}
+	catch (const std::exception &e) {
+		std::cerr << "CGI error: " << e.what() << std::endl;
+		return buildHttpResponse(500, "<h1>500 Internal Server Error</h1>", "text/html");
+	}
 
 	return "HTTP/1.1 200 OK\r\n" + output;
 }
