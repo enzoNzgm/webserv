@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Delete</title>
+	<link rel="stylesheet" href="asset/css/style.css">
+</head>
+<body>
+	<header class= "site-header">
+		<h1 class="site-title">Webserv</h1>
+		<nav>
+			<ul class="list">
+				<li class="list-link"><a class="link-style" href="index.html">Accueil</a></li>
+				<li class="list-link"><a class="link-style" href="about.html">À propos</a></li>
+				<li class="list-link"><a class="link-style" href="contact.html">Contact</a></li>
+				<li class="list-link"><a class="link-style" href="upload.html">Upload</a></li>
+				<li class="list-link"><a class="link-style" href="delete.html">Delete</a></li>
+			</ul>
+		</nav>
+	</header>
+	<main>
+		<section>
+			<h2 class="section-title">Suppression de fichiers</h2>
+			<p class="text-section">Utilisez le formulaire ci-dessous pour supprimer des fichiers de notre serveur.</p>
+			<form action="/delete" method="POST" class="upload-form">
+				<label for="filename">Nom du fichier à supprimer:</label><br>
+				<input type="text" id="filename" name="filename" required><br>
+				<input type="submit" value="Supprimer">
+			</form>
+		</section>
+	</main>
+	<footer>
+		<p>&copy; 2025 Webserv. Tous droits réservés.</p>
+	</footer>
+</body>
+</html>

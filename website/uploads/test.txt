@@ -1,0 +1,23 @@
+Démarrer le serveur:
+./webserv webserv.conf
+Tests manuels:
+GET - Page normale
+curl http://localhost:8080/
+
+GET - Page 404 personnalisée
+curl http://localhost:8080/nonexistent.html
+
+POST - Formulaire
+curl -X POST http://localhost:8080/contact \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "name=Test&email=test@test.com&message=Hello"
+  
+POST - Upload de fichier
+curl -X POST http://localhost:8080/upload \
+  -F "file=@/path/to/file.jpg"
+  
+DELETE - Supprimer un fichier
+curl -X DELETE http://localhost:8080/uploads/file.jpg
+
+Script de test automatique:
+./test_features.sh

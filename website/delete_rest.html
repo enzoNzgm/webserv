@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Delete (REST API)</title>
+	<link rel="stylesheet" href="asset/css/style.css">
+	<style>
+		.result {
+			margin-top: 20px;
+			padding: 10px;
+			border-radius: 5px;
+		}
+		.success { background-color: #d4edda; color: #155724; }
+		.error { background-color: #f8d7da; color: #721c24; }
+	</style>
+</head>
+<body>
+	<header class="site-header">
+		<h1 class="site-title">Webserv</h1>
+		<nav>
+			<ul class="list">
+				<li class="list-link"><a class="link-style" href="index.html">Accueil</a></li>
+				<li class="list-link"><a class="link-style" href="about.html">À propos</a></li>
+				<li class="list-link"><a class="link-style" href="contact.html">Contact</a></li>
+				<li class="list-link"><a class="link-style" href="upload.html">Upload</a></li>
+				<li class="list-link"><a class="link-style" href="delete.html">Delete (Form)</a></li>
+				<li class="list-link"><a class="link-style" href="delete_rest.html">Delete (REST)</a></li>
+			</ul>
+		</nav>
+	</header>
+	<main>
+		<section>
+			<h2 class="section-title">Suppression de fichiers (REST API)</h2>
+			<p class="text-section">
+				Cette page utilise la <strong>méthode HTTP DELETE</strong> au lieu d'un formulaire POST.<br>
+				Le fichier est supprimé directement par le code C++ du serveur (pas de CGI).
+			</p>
+
+			<div class="upload-form">
+				<label for="filename">Chemin du fichier à supprimer:</label><br>
+				<input type="text" id="filename" placeholder="/uploads/fichier.txt" style="width: 300px;"><br>
+				<button onclick="deleteFile()" style="margin-top: 10px;">Supprimer avec DELETE</button>
+			</div>
+
+			<div id="result"></div>
+		</section>
+	</main>
+	<footer>
+		<p>&copy; 2025 Webserv. Tous droits réservés.</p>
+	</footer>
+
+	<script>
+		function deleteFile() {
+			const filename = document.getElementById('filename').value;
+			const resultDiv = document.getElementById('result');
+
+			if (!filename) {
+				resultDiv.className = 'result error';
+				resultDiv.innerHTML = '❌ Veuillez entrer un nom de fichier';
+				return;
+			}
+
+			// Appel HTTP DELETE
+			fetch(filename, {
+				method: 'DELETE'
+			})
+			.then(response => response.text())
+			.then(data => {
+				if (data.includes('200 OK')) {
+					resultDiv.className = 'result success';
+					resultDiv.innerHTML = '✅ Fichier supprimé avec succès (via HTTP DELETE)';
+				} else if (data.includes('404')) {
+					resultDiv.className = 'result error';
+					resultDiv.innerHTML = '❌ Fichier introuvable';
+				} else if (data.includes('403')) {
+					resultDiv.className = 'result error';
+					resultDiv.innerHTML = '❌ Accès refusé';
+				} else {
+					resultDiv.className = 'result error';
+					resultDiv.innerHTML = '❌ Erreur: ' + data;
+				}
+			})
+			.catch(error => {
+				resultDiv.className = 'result error';
+				resultDiv.innerHTML = '❌ Erreur réseau: ' + error;
+			});
+		}
+	</script>
+</body>
+</html>

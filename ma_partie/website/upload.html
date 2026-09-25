@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Upload</title>
+	<link rel="stylesheet" href="asset/css/style.css">
+</head>
+<body>
+	<header class= "site-header">
+		<h1 class="site-title">Webserv</h1>
+		<nav>
+			<ul class="list">
+				<li class="list-link"><a class="link-style" href="index.html">Accueil</a></li>
+				<li class="list-link"><a class="link-style" href="about.html">À propos</a></li>
+				<li class="list-link"><a class="link-style" href="contact.html">Contact</a></li>
+				<li class="list-link"><a class="link-style" href="upload.html">Upload</a></li>
+				<li class="list-link"><a class="link-style" href="delete.html">Delete</a></li>
+			</ul>
+		</nav>
+	</header>
+	<main>
+		<section>
+			<h2 class="section-title">Téléversement de fichiers</h2>
+			<p class="text-section">Utilisez le formulaire ci-dessous pour téléverser vos fichiers sur notre serveur.</p>
+			<form action="/upload" method="POST" enctype="multipart/form-data" class="upload-form">
+				<label for="file">Choisir un fichier:</label><br>
+				<input type="file" id="file" name="file" required><br>
+				<input type="submit" value="Uploader">
+			</form>
+		</section>
+	</main>
+	<footer>
+		<p>&copy; 2025 Webserv. Tous droits réservés.</p>
+	</footer>
+</body>
+</html>

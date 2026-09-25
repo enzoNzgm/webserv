@@ -1,0 +1,6 @@
+objs/
+*.o
+*.d
+webserv
+*.bin
+*.log
